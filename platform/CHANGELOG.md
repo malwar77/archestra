@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.4.0-beta.9](https://github.com/archestra-ai/archestra/compare/platform-v1.4.0-beta.8...platform-v1.4.0-beta.9) (2026-09-14)
+
+
+### Features
+
+* unify credentials across Agent Runtime, MCP, and GitHub integrations ([#7899](https://github.com/archestra-ai/archestra/issues/7899)) ([2e10a33](https://github.com/archestra-ai/archestra/commit/2e10a3351b66a56043b51bc0aa19b1118e583490))
+
+
+### Bug Fixes
+
+* **connect:** preserve Claude startup guard in cmux terminals ([#7896](https://github.com/archestra-ai/archestra/issues/7896)) ([46dad8c](https://github.com/archestra-ai/archestra/commit/46dad8c92235114ec75895ed7e974315b831cdef))
+
 ## [1.4.0-beta.8](https://github.com/archestra-ai/archestra/compare/platform-v1.4.0-beta.7...platform-v1.4.0-beta.8) (2026-09-13)
 
 
