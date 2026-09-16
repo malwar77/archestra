@@ -987,8 +987,8 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
         throw new ApiError(404, "Agent not found");
       }
       // Enforce scope-based modify permissions like UpdateAgent does
-      const userTeamIds = !checker.isAdmin(existingAgent.agentType)
-        ? await TeamModel.getUserTeamIds(user.id)
+      const userAdminTeamIds = !checker.isAdmin(existingAgent.agentType)
+        ? await TeamModel.getUserAdminTeamIds(user.id)
         : [];
       requireAgentModifyPermission({
         checker,
@@ -996,7 +996,7 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
         agentScope: existingAgent.scope,
         agentAuthorId: existingAgent.authorId,
         agentTeamIds: existingAgent.teams.map((t) => t.id),
-        userTeamIds,
+        userAdminTeamIds,
         userId: user.id,
       });
 
@@ -1073,8 +1073,8 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
       }
 
       // Enforce scope-based modify permissions on the source agent
-      const userTeamIds = !checker.isAdmin(sourceAgent.agentType)
-        ? await TeamModel.getUserTeamIds(user.id)
+      const userAdminTeamIds = !checker.isAdmin(sourceAgent.agentType)
+        ? await TeamModel.getUserAdminTeamIds(user.id)
         : [];
       requireAgentModifyPermission({
         checker,
@@ -1082,7 +1082,7 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
         agentScope: sourceAgent.scope,
         agentAuthorId: sourceAgent.authorId,
         agentTeamIds: sourceAgent.teams.map((t) => t.id),
-        userTeamIds,
+        userAdminTeamIds,
         userId: user.id,
       });
 
@@ -1333,8 +1333,8 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
       }
 
       // Enforce scope-based modify permissions like UpdateAgent does
-      const userTeamIds = !checker.isAdmin(agent.agentType)
-        ? await TeamModel.getUserTeamIds(user.id)
+      const userAdminTeamIds = !checker.isAdmin(agent.agentType)
+        ? await TeamModel.getUserAdminTeamIds(user.id)
         : [];
       requireAgentModifyPermission({
         checker,
@@ -1342,7 +1342,7 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
         agentScope: agent.scope,
         agentAuthorId: agent.authorId,
         agentTeamIds: agent.teams.map((t) => t.id),
-        userTeamIds,
+        userAdminTeamIds,
         userId: user.id,
       });
 
@@ -1449,8 +1449,8 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
       }
 
       // Enforce scope-based modify permissions like UpdateAgent does
-      const userTeamIds = !checker.isAdmin(agent.agentType)
-        ? await TeamModel.getUserTeamIds(user.id)
+      const userAdminTeamIds = !checker.isAdmin(agent.agentType)
+        ? await TeamModel.getUserAdminTeamIds(user.id)
         : [];
       requireAgentModifyPermission({
         checker,
@@ -1458,7 +1458,7 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
         agentScope: agent.scope,
         agentAuthorId: agent.authorId,
         agentTeamIds: agent.teams.map((t) => t.id),
-        userTeamIds,
+        userAdminTeamIds,
         userId: user.id,
       });
 
@@ -1937,8 +1937,8 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
       });
 
       // Fetch user's team IDs once for scope-based checks and team assignment validation
-      const userTeamIds = !checker.isAdmin(existingAgent.agentType)
-        ? await TeamModel.getUserTeamIds(user.id)
+      const userAdminTeamIds = !checker.isAdmin(existingAgent.agentType)
+        ? await TeamModel.getUserAdminTeamIds(user.id)
         : [];
 
       // Enforce scope-based modify permissions on the existing agent
@@ -1948,7 +1948,7 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
         agentScope: existingAgent.scope,
         agentAuthorId: existingAgent.authorId,
         agentTeamIds: existingAgent.teams.map((t) => t.id),
-        userTeamIds,
+        userAdminTeamIds,
         userId: user.id,
       });
 
@@ -2500,8 +2500,8 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
       }
 
       // Enforce scope-based modify permissions
-      const userTeamIds = !checker.isAdmin(agent.agentType)
-        ? await TeamModel.getUserTeamIds(user.id)
+      const userAdminTeamIds = !checker.isAdmin(agent.agentType)
+        ? await TeamModel.getUserAdminTeamIds(user.id)
         : [];
       requireAgentModifyPermission({
         checker,
@@ -2509,7 +2509,7 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
         agentScope: agent.scope,
         agentAuthorId: agent.authorId,
         agentTeamIds: agent.teams.map((t) => t.id),
-        userTeamIds,
+        userAdminTeamIds,
         userId: user.id,
       });
 
@@ -2579,8 +2579,8 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
         throw new ApiError(404, "Agent not found");
       }
 
-      const userTeamIds = !checker.isAdmin(agent.agentType)
-        ? await TeamModel.getUserTeamIds(user.id)
+      const userAdminTeamIds = !checker.isAdmin(agent.agentType)
+        ? await TeamModel.getUserAdminTeamIds(user.id)
         : [];
       requireAgentModifyPermission({
         checker,
@@ -2588,7 +2588,7 @@ const agentRoutes: FastifyPluginAsyncZod = async (fastify) => {
         agentScope: agent.scope,
         agentAuthorId: agent.authorId,
         agentTeamIds: agent.teams.map((t) => t.id),
-        userTeamIds,
+        userAdminTeamIds,
         userId: user.id,
       });
 

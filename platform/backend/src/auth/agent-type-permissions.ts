@@ -143,15 +143,17 @@ export function requireAgentModifyPermission(params: {
   agentScope: AgentScope;
   agentAuthorId: string | null;
   agentTeamIds: string[];
-  userTeamIds: string[];
+  userAdminTeamIds?: string[];
+  userTeamIds?: string[];
   userId: string;
 }): void {
   requireScopedModifyPermission({
     isAdmin: params.checker.isAdmin(params.agentType),
-    isTeamAdmin: params.checker.isTeamAdmin(params.agentType),
+    isTeamAdmin: params.checker.isTeamAdmin ? params.checker.isTeamAdmin(params.agentType) : false,
     scope: params.agentScope,
     authorId: params.agentAuthorId,
     resourceTeamIds: params.agentTeamIds,
+    userAdminTeamIds: params.userAdminTeamIds,
     userTeamIds: params.userTeamIds,
     userId: params.userId,
     resourceLabel: "agent",
@@ -163,7 +165,7 @@ export function requireAgentModifyPermission(params: {
  *
  * - `isAdmin` → always allowed
  * - `scope=org` → requires admin
- * - `scope=team` → requires team-admin + membership in one of the resource's teams
+ * - `scope=team` → requires literal team admin role in at least one assigned team (OR semantics)
  * - `scope=personal` → requires authorship
  *
  * `resourceLabel` is the singular noun used in error messages (e.g. "agent",
@@ -171,11 +173,12 @@ export function requireAgentModifyPermission(params: {
  */
 export function requireScopedModifyPermission(params: {
   isAdmin: boolean;
-  isTeamAdmin: boolean;
+  isTeamAdmin?: boolean;
   scope: AgentScope;
   authorId: string | null;
   resourceTeamIds: string[];
-  userTeamIds: string[];
+  userAdminTeamIds?: string[];
+  userTeamIds?: string[];
   userId: string;
   resourceLabel: string;
 }): void {
@@ -194,13 +197,30 @@ export function requireScopedModifyPermission(params: {
       );
 
     case "team": {
+      // When userAdminTeamIds is supplied, enforce literal team-admin membership
+      // with OR semantics: user must be an admin of at least one of the resource's teams.
+      if (params.userAdminTeamIds !== undefined) {
+        const adminTeamIdSet = new Set(params.userAdminTeamIds);
+        const isAdminOfAnyTeam = params.resourceTeamIds.some((id) =>
+          adminTeamIdSet.has(id),
+        );
+        if (params.resourceTeamIds.length === 0 || !isAdminOfAnyTeam) {
+          throw new ApiError(
+            403,
+            `You need team-admin permission to manage team-scoped ${resourceLabel}s`,
+          );
+        }
+        return;
+      }
+
+      // Legacy RBAC fallback
       if (!params.isTeamAdmin) {
         throw new ApiError(
           403,
           `You need team-admin permission to manage team-scoped ${resourceLabel}s`,
         );
       }
-      const userTeamIdSet = new Set(params.userTeamIds);
+      const userTeamIdSet = new Set(params.userTeamIds ?? []);
       const isMemberOfAnyTeam = params.resourceTeamIds.some((id) =>
         userTeamIdSet.has(id),
       );

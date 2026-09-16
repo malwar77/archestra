@@ -116,23 +116,16 @@ export async function assertCallerMayModifyApp(params: {
   authorId: string | null;
   resourceTeamIds: string[];
 }): Promise<void> {
-  const [isAdmin, isTeamAdmin, userTeamIds] = await Promise.all([
+  const [isAdmin, userAdminTeamIds] = await Promise.all([
     userHasPermission(params.userId, params.organizationId, "app", "admin"),
-    userHasPermission(
-      params.userId,
-      params.organizationId,
-      "app",
-      "team-admin",
-    ),
-    TeamModel.getUserTeamIds(params.userId),
+    TeamModel.getUserAdminTeamIds(params.userId),
   ]);
   requireScopedModifyPermission({
     isAdmin,
-    isTeamAdmin,
     scope: params.scope,
     authorId: params.authorId,
     resourceTeamIds: params.resourceTeamIds,
-    userTeamIds,
+    userAdminTeamIds,
     userId: params.userId,
     resourceLabel: "app",
   });

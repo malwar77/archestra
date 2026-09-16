@@ -832,6 +832,75 @@ describe("requireAgentModifyPermission", () => {
   });
 });
 
+
+  test("literal team-admin enforcement: OR semantics across multiple assigned teams and cross-team isolation", async ({
+    makeUser,
+    makeOrganization,
+    makeMember,
+  }) => {
+    const user = await makeUser();
+    const org = await makeOrganization();
+    await makeMember(user.id, org.id, { role: MEMBER_ROLE_NAME });
+
+    const checker = await getAgentTypePermissionChecker({
+      userId: user.id,
+      organizationId: org.id,
+    });
+
+    const userAdminTeamIds = ["team-alpha", "team-beta"];
+
+    // Passes when user is an admin of at least one assigned team (OR semantics)
+    expect(() =>
+      requireAgentModifyPermission({
+        checker,
+        agentType: "agent",
+        agentScope: "team",
+        agentAuthorId: "another-user",
+        agentTeamIds: ["team-alpha", "team-gamma"],
+        userAdminTeamIds,
+        userId: user.id,
+      }),
+    ).not.toThrow();
+
+    expect(() =>
+      requireAgentModifyPermission({
+        checker,
+        agentType: "agent",
+        agentScope: "team",
+        agentAuthorId: "another-user",
+        agentTeamIds: ["team-gamma", "team-beta"],
+        userAdminTeamIds,
+        userId: user.id,
+      }),
+    ).not.toThrow();
+
+    // Cross-team 403 isolation: throws 403 when user is NOT an admin of any of the agent's teams
+    expect(() =>
+      requireAgentModifyPermission({
+        checker,
+        agentType: "agent",
+        agentScope: "team",
+        agentAuthorId: "another-user",
+        agentTeamIds: ["team-gamma", "team-delta"],
+        userAdminTeamIds,
+        userId: user.id,
+      }),
+    ).toThrow(ApiError);
+
+    // Fails closed if agent has no assigned teams
+    expect(() =>
+      requireAgentModifyPermission({
+        checker,
+        agentType: "agent",
+        agentScope: "team",
+        agentAuthorId: "another-user",
+        agentTeamIds: [],
+        userAdminTeamIds,
+        userId: user.id,
+      }),
+    ).toThrow(ApiError);
+  });
+
 describe("requireScopedModifyPermission", () => {
   test("fails closed on an out-of-union scope", () => {
     // a corrupted/unknown scope must be denied, not fall through and grant

@@ -48,7 +48,8 @@ export function requireSkillModifyPermission(params: {
   scope: ResourceVisibilityScope;
   authorId: string | null;
   skillTeamIds: string[];
-  userTeamIds: string[];
+  userAdminTeamIds?: string[];
+  userTeamIds?: string[];
   userId: string;
 }): void {
   requireScopedModifyPermission({
@@ -57,6 +58,7 @@ export function requireSkillModifyPermission(params: {
     scope: params.scope,
     authorId: params.authorId,
     resourceTeamIds: params.skillTeamIds,
+    userAdminTeamIds: params.userAdminTeamIds,
     userTeamIds: params.userTeamIds,
     userId: params.userId,
     resourceLabel: "skill",
