@@ -28,21 +28,25 @@ export function computeCanModifyAgent({
   isTeamAdmin,
   currentUserId,
   userTeamIds,
+  userAdminTeamIds,
 }: {
   agent: AccessSubject | null | undefined;
   isAdmin: boolean;
-  isTeamAdmin: boolean;
+  isTeamAdmin?: boolean;
   currentUserId: string | undefined;
-  userTeamIds: ReadonlySet<string>;
+  userTeamIds?: ReadonlySet<string>;
+  userAdminTeamIds?: ReadonlySet<string>;
 }): boolean {
   if (!agent) return false;
   const isPersonal = agent.scope === "personal";
   const isTeamScoped = agent.scope === "team";
   const isOwner = !!currentUserId && agent.authorId === currentUserId;
-  const isMemberOfAgentTeam = agent.teams.some((t) => userTeamIds.has(t.id));
+  const isTeamAdminMember = userAdminTeamIds
+    ? agent.teams.some((t) => userAdminTeamIds.has(t.id))
+    : (!!isTeamAdmin && !!userTeamIds && agent.teams.some((t) => userTeamIds.has(t.id)));
   return (
     isAdmin ||
-    (isTeamScoped && isTeamAdmin && isMemberOfAgentTeam) ||
+    (isTeamScoped && isTeamAdminMember) ||
     (isPersonal && isOwner)
   );
 }
@@ -86,12 +90,23 @@ export function useAgentAccess(
   const { data: session } = useSession();
   const currentUserId = session?.user?.id;
 
+  const adminTeamIds = new Set(
+    (userTeams ?? [])
+      .filter((team: any) =>
+        team.members?.some(
+          (m: any) => m.userId === currentUserId && m.role === "admin",
+        ) || team.role === "admin",
+      )
+      .map((t) => t.id),
+  );
+
   const canModify = computeCanModifyAgent({
     agent,
     isAdmin: !!isAdmin,
     isTeamAdmin: !!isTeamAdmin,
     currentUserId,
     userTeamIds: new Set((userTeams ?? []).map((t) => t.id)),
+    userAdminTeamIds: adminTeamIds.size > 0 ? adminTeamIds : undefined,
   });
   const isBuiltIn = !!agent?.builtIn;
 

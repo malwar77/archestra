@@ -45,9 +45,17 @@ export function useCanManageGateway(gateway: Gateway): {
   }
 
   if (gateway.scope === "team") {
-    const userTeamIds = new Set((userTeams ?? []).map((t) => t.id));
-    const isMember = gateway.teams?.some((t) => userTeamIds.has(t.id)) ?? false;
-    return { canManage: !!isTeamAdmin && isMember, isLoading };
+    const adminTeamIds = new Set(
+      (userTeams ?? [])
+        .filter((team: any) =>
+          team.members?.some(
+            (m: any) => m.userId === currentUserId && m.role === "admin",
+          ) || team.role === "admin",
+        )
+        .map((t) => t.id),
+    );
+    const isTeamAdminMember = gateway.teams?.some((t) => adminTeamIds.has(t.id)) ?? false;
+    return { canManage: isTeamAdminMember, isLoading };
   }
 
   return { canManage: !!isAdmin, isLoading };

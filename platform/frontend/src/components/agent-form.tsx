@@ -989,7 +989,7 @@ export function AccessLevelSelector({
     if (value === "team" && !canReadTeams)
       return `Team sharing is unavailable without ${formatPermissionRequirement({ resource: "team", action: "read" })}`;
     if (value === "team" && !canShareWithTeams)
-      return `You need ${resourceName}:team-admin permission to share with teams`;
+      return `You must be an admin of a team to share ${resourceName} with teams`;
     if (value === "team" && hasNoAvailableTeams)
       return "There are no teams to share with yet. Create one from Settings → Teams.";
     if (value === "org" && !isAdmin)

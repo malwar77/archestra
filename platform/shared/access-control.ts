@@ -31,7 +31,6 @@ export const allAvailableActions: Record<Resource, Action[]> = {
     "create",
     "update",
     "delete",
-    "team-admin",
     "admin",
     "deploy-to-restricted",
   ],
@@ -40,7 +39,6 @@ export const allAvailableActions: Record<Resource, Action[]> = {
     "create",
     "update",
     "delete",
-    "team-admin",
     "admin",
     "deploy-to-restricted",
   ],
@@ -50,7 +48,6 @@ export const allAvailableActions: Record<Resource, Action[]> = {
     "create",
     "update",
     "delete",
-    "team-admin",
     "admin",
     "deploy-to-restricted",
   ],
@@ -62,7 +59,7 @@ export const allAvailableActions: Record<Resource, Action[]> = {
   llmProxy: ["read", "update"],
   llmProviderApiKey: ["read", "create", "update", "delete", "admin"],
   llmVirtualKey: ["read", "create", "update", "delete", "admin"],
-  llmOauthClient: ["read", "create", "update", "delete", "team-admin", "admin"],
+  llmOauthClient: ["read", "create", "update", "delete", "admin"],
   // "update" covers the whole model row, generation parameters included. An
   // extra "admin" action once gated `configuredParameters` on the grounds that
   // model rows are global, but pricing and `ignored` are equally global and
@@ -79,11 +76,10 @@ export const allAvailableActions: Record<Resource, Action[]> = {
     "create",
     "update",
     "delete",
-    "team-admin",
     "admin",
     "deploy-to-restricted",
   ],
-  mcpOauthClient: ["read", "create", "update", "delete", "team-admin", "admin"],
+  mcpOauthClient: ["read", "create", "update", "delete", "admin"],
   toolPolicy: ["read", "create", "update", "delete"],
   mcpRegistry: [
     "read",
@@ -91,7 +87,6 @@ export const allAvailableActions: Record<Resource, Action[]> = {
     "update",
     "delete",
     "manage-deleted",
-    "team-admin",
     "deploy-to-restricted",
   ],
   mcpServerInstallation: [
@@ -168,7 +163,6 @@ export const editorPermissions: Record<Resource, Action[]> = {
     "create",
     "update",
     "delete",
-    "team-admin",
     "deploy-to-restricted",
   ],
   skill: [
@@ -176,7 +170,6 @@ export const editorPermissions: Record<Resource, Action[]> = {
     "create",
     "update",
     "delete",
-    "team-admin",
     "deploy-to-restricted",
   ],
   plugin: ["read", "create", "update", "delete"],
@@ -185,7 +178,6 @@ export const editorPermissions: Record<Resource, Action[]> = {
     "create",
     "update",
     "delete",
-    "team-admin",
     "deploy-to-restricted",
   ],
   sandbox: ["execute"],
@@ -196,7 +188,7 @@ export const editorPermissions: Record<Resource, Action[]> = {
   llmProxy: ["read", "update"],
   llmProviderApiKey: ["read", "create", "update", "delete"],
   llmVirtualKey: ["read", "create", "update", "delete"],
-  llmOauthClient: ["read", "create", "update", "delete", "team-admin"],
+  llmOauthClient: ["read", "create", "update", "delete"],
   llmModel: ["read", "update"],
   llmLimit: ["read", "create", "update", "delete"],
   llmCost: ["read"],
@@ -207,17 +199,15 @@ export const editorPermissions: Record<Resource, Action[]> = {
     "create",
     "update",
     "delete",
-    "team-admin",
     "deploy-to-restricted",
   ],
-  mcpOauthClient: ["read", "create", "update", "delete", "team-admin"],
+  mcpOauthClient: ["read", "create", "update", "delete"],
   toolPolicy: ["read", "create", "update", "delete"],
   mcpRegistry: [
     "read",
     "create",
     "update",
     "delete",
-    "team-admin",
     "deploy-to-restricted",
   ],
   mcpServerInstallation: ["read", "create", "update", "delete"],
@@ -431,8 +421,7 @@ export const permissionDescriptions: Record<string, string> = {
   "agent:create": "Create new agents",
   "agent:update": "Modify agent configuration and settings",
   "agent:delete": "Delete agents",
-  "agent:team-admin": "Manage team assignments for agents",
-  "agent:admin":
+    "agent:admin":
     "Full administrative control over all agents, bypassing team restrictions",
   "agent:deploy-to-restricted":
     "Assign agents to restricted deployment environments",
@@ -441,8 +430,7 @@ export const permissionDescriptions: Record<string, string> = {
   "skill:create": "Create new agent skills",
   "skill:update": "Modify agent skills and their team assignments",
   "skill:delete": "Delete agent skills",
-  "skill:team-admin": "Manage team assignments for agent skills",
-  "skill:admin":
+    "skill:admin":
     "Full administrative control over all agent skills, bypassing team restrictions",
   "skill:deploy-to-restricted":
     "Assign agent skills to restricted deployment environments",
@@ -457,8 +445,6 @@ export const permissionDescriptions: Record<string, string> = {
   "app:update":
     "Modify MCP Apps and their tools within your scope (your own apps; team apps with app:team-admin; org apps with app:admin)",
   "app:delete": "Delete MCP Apps",
-  "app:team-admin":
-    "Manage team-scoped MCP Apps, including their team assignments, in teams you belong to",
   "app:admin":
     "Full administrative control over all MCP Apps, bypassing team restrictions",
   "app:deploy-to-restricted":
@@ -482,13 +468,10 @@ export const permissionDescriptions: Record<string, string> = {
   "mcpGateway:create": "Create new MCP gateways",
   "mcpGateway:update": "Modify MCP gateway configuration",
   "mcpGateway:delete": "Delete MCP gateways",
-  "mcpGateway:team-admin": "Manage team assignments for MCP gateways",
-  "mcpOauthClient:read": "View MCP OAuth client registrations",
+    "mcpOauthClient:read": "View MCP OAuth client registrations",
   "mcpOauthClient:create": "Create MCP OAuth client registrations",
   "mcpOauthClient:update": "Modify MCP OAuth client registrations",
   "mcpOauthClient:delete": "Delete MCP OAuth client registrations",
-  "mcpOauthClient:team-admin":
-    "Manage team assignments for MCP OAuth client registrations",
   "mcpOauthClient:admin":
     "Manage all MCP OAuth client registrations, bypassing team restrictions",
   "mcpGateway:admin":
@@ -507,8 +490,7 @@ export const permissionDescriptions: Record<string, string> = {
   "mcpRegistry:delete": "Remove servers from the MCP registry",
   "mcpRegistry:manage-deleted":
     "View and restore soft-deleted MCP registry entries",
-  "mcpRegistry:team-admin": "Manage team assignments for MCP registry entries",
-  "mcpRegistry:deploy-to-restricted":
+    "mcpRegistry:deploy-to-restricted":
     "Deploy MCP servers (catalog items) to restricted environments",
   "mcpServerInstallation:read": "View installed MCP servers and their status",
   "mcpServerInstallation:create": "Install MCP servers from the registry",
@@ -547,8 +529,6 @@ export const permissionDescriptions: Record<string, string> = {
   "llmOauthClient:create": "Create LLM OAuth client registrations",
   "llmOauthClient:update": "Modify LLM OAuth client registrations",
   "llmOauthClient:delete": "Delete LLM OAuth client registrations",
-  "llmOauthClient:team-admin":
-    "Manage team assignments for LLM OAuth client registrations",
   "llmOauthClient:admin":
     "Manage all LLM OAuth client registrations, bypassing team restrictions",
   "llmModel:read": "View synced LLM models and capabilities",

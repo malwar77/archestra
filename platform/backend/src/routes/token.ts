@@ -101,16 +101,11 @@ const tokenRoutes: FastifyPluginAsyncZod = async (fastify) => {
         { team: ["update"] },
         headers,
       );
-      const { success: hasMcpGatewayTeamAdmin } = await hasPermission(
-        { mcpGateway: ["team-admin"] },
-        headers,
-      );
-
       const adminTeamIds = canManageAllTeams
         ? []
         : await TeamModel.getUserAdminTeamIds(user.id);
       const canAccessTeamTokens =
-        canManageAllTeams || hasMcpGatewayTeamAdmin || adminTeamIds.length > 0;
+        canManageAllTeams || adminTeamIds.length > 0;
 
       // Ensure org token exists
       await TeamTokenModel.ensureOrganizationToken();

@@ -94,7 +94,7 @@ export function SkillScopeSelector({
           ? "No teams available"
           : undefined,
       disabledReason: !canShareTeams
-        ? "You need skill:team-admin permission to share with teams"
+        ? "You must be an admin of a team to share skills with teams"
         : hasNoTeams
           ? "There are no teams to share with yet. Create one from Settings → Teams."
           : undefined,

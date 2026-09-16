@@ -49,6 +49,7 @@ export function requireOauthClientModifyPermission(params: {
   authorId: string | null;
   clientTeamIds: string[];
   userTeamIds: string[];
+  userAdminTeamIds?: string[];
   userId: string;
 }): void {
   requireScopedModifyPermission({
@@ -58,6 +59,7 @@ export function requireOauthClientModifyPermission(params: {
     authorId: params.authorId,
     resourceTeamIds: params.clientTeamIds,
     userTeamIds: params.userTeamIds,
+    userAdminTeamIds: params.userAdminTeamIds,
     userId: params.userId,
     resourceLabel: "OAuth client",
   });
